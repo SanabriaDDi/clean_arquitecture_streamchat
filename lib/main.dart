@@ -1,6 +1,8 @@
+import 'package:clean_architecture_streamchat/ui/app_theme_cubit.dart';
 import 'package:clean_architecture_streamchat/ui/splash/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 void main() {
@@ -26,13 +28,20 @@ class MyApp extends StatelessWidget {
     connectFakeUser();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
-    return MaterialApp(
-      title: 'FlutterChat',
-      home: const SplashView(),
-      theme: ThemeData.light(),
-      builder: (context, child) {
-        return StreamChat(child: child, client: _streamChatClient);
-      },
+    return BlocProvider(
+      create: (_) => AppThemeCubit()..init(),
+      child: BlocBuilder<AppThemeCubit, bool>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'FlutterChat',
+            home: const SplashView(),
+            theme: state ? ThemeData.dark() : ThemeData.light(),
+            builder: (context, child) {
+              return StreamChat(child: child, client: _streamChatClient);
+            },
+          );
+        },
+      ),
     );
   }
 }

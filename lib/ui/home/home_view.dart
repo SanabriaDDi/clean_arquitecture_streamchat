@@ -1,6 +1,8 @@
 import 'package:clean_architecture_streamchat/navigator_utils.dart';
+import 'package:clean_architecture_streamchat/ui/home/home_cubit.dart';
 import 'package:clean_architecture_streamchat/ui/home/settings/settings_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'chat/chat_view.dart';
 import 'chat/selection/friends_selection_view.dart';
@@ -10,19 +12,26 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: IndexedStack(
-            index: 1,
-            children: const [
-              ChatView(),
-              SettingsView(),
-            ],
+    return BlocProvider(
+      create: (context) => HomeCubit(),
+      child: Column(
+        children: [
+          Expanded(
+            child: BlocBuilder<HomeCubit, int>(
+              builder: (context, state) {
+                return IndexedStack(
+                  index: state,
+                  children: const [
+                    ChatView(),
+                    SettingsView(),
+                  ],
+                );
+              },
+            ),
           ),
-        ),
-        const HomeNavigationBar()
-      ],
+          const HomeNavigationBar()
+        ],
+      ),
     );
   }
 }
@@ -39,7 +48,9 @@ class HomeNavigationBar extends StatelessWidget {
         children: [
           ElevatedButton(
             child: const Text('Chats'),
-            onPressed: () {},
+            onPressed: () {
+              context.read<HomeCubit>().onChangeTab(0);
+            },
           ),
           FloatingActionButton(
             child: const Icon(Icons.add),
@@ -49,7 +60,9 @@ class HomeNavigationBar extends StatelessWidget {
           ),
           ElevatedButton(
             child: const Text('Settings'),
-            onPressed: () {},
+            onPressed: () {
+              context.read<HomeCubit>().onChangeTab(1);
+            },
           ),
         ],
       ),
