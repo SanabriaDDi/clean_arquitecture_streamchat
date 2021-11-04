@@ -10,7 +10,10 @@ class ProfileVeifyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ProfileVerifyCubit(),
+      create: (_) => ProfileVerifyCubit(
+        imagePickerRepository: context.read(),
+        profileSignInUseCase: context.read(),
+      ),
       child: BlocConsumer<ProfileVerifyCubit, ProfileState>(
         listener: (context, state) {
           if (state.success) {
@@ -25,24 +28,30 @@ class ProfileVeifyView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Verify your identity'),
-                  const Placeholder(
-                    fallbackHeight: 100,
-                    fallbackWidth: 100,
-                  ),
+                  if (state.file != null)
+                    Image.file(state.file!, height: 150,)
+                  else
+                    const Placeholder(
+                      fallbackHeight: 100,
+                      fallbackWidth: 100,
+                    ),
                   IconButton(
                     icon: const Icon(Icons.photo),
                     onPressed: () =>
                         context.read<ProfileVerifyCubit>().pickImage(),
                   ),
                   const Text('Your name'),
-                  const TextField(
-                    decoration:
-                        InputDecoration(hintText: 'Or just how people now you'),
+                  TextField(
+                    controller:
+                        context.read<ProfileVerifyCubit>().nameController,
+                    decoration: const InputDecoration(
+                        hintText: 'Or just how people now you'),
                   ),
                   ElevatedButton(
-                      child: const Text('Start chatting now'), onPressed: () {
+                      child: const Text('Start chatting now'),
+                      onPressed: () {
                         context.read<ProfileVerifyCubit>().startChatting();
-                  })
+                      })
                 ],
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:clean_architecture_streamchat/domain/usecases/logout_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsSwitchCubit extends Cubit<bool> {
@@ -6,13 +7,15 @@ class SettingsSwitchCubit extends Cubit<bool> {
   void onChangeDarkMode(bool isDark) => emit(isDark);
 }
 
-
 class SettingsLogoutCubit extends Cubit<void> {
-  SettingsLogoutCubit() : super(null);
+  SettingsLogoutCubit({required LogoutUseCase logoutUseCase})
+      : _logoutUseCase = logoutUseCase,
+        super(null);
 
-  void logOut() {
-    //TODO: call services
-    print('log out');
+  final LogoutUseCase _logoutUseCase;
+
+  void logOut() async {
+    await _logoutUseCase.logout();
     emit(null);
   }
 }

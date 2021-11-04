@@ -1,18 +1,35 @@
 import 'package:clean_architecture_streamchat/navigator_utils.dart';
+import 'package:clean_architecture_streamchat/ui/home/chat/chat_view.dart';
 import 'package:clean_architecture_streamchat/ui/home/chat/selection/friends_selection_cubit.dart';
 import 'package:clean_architecture_streamchat/ui/home/chat/selection/group_selection_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class FriendsSelectionView extends StatelessWidget {
   const FriendsSelectionView({Key? key}) : super(key: key);
+
+  void _createFriendChannel(
+      BuildContext context, ChatUserState chatUserState) async {
+    final channel = await context
+        .read<FriendsSelectionCubit>()
+        .createFriendChannel(chatUserState);
+    pushAndReplaceToPage(
+        context,
+        Scaffold(
+          body: StreamChannel(channel: channel, child: const ChannelPage()),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => FriendsSelectionCubit()..init()),
+        BlocProvider(
+            create: (context) =>
+                FriendsSelectionCubit(streamApiRepository: context.read())
+                  ..init()),
         BlocProvider(create: (_) => FriendsGroupCubit()),
       ],
       child: BlocBuilder<FriendsGroupCubit, bool>(
@@ -25,8 +42,9 @@ class FriendsSelectionView extends StatelessWidget {
               return Scaffold(
                 floatingActionButton: isGroup && selectedUsers.isNotEmpty
                     ? FloatingActionButton(onPressed: () {
-                      pushAndReplaceToPage(context, GroupSelectionView(selectedUsers));
-                })
+                        pushAndReplaceToPage(
+                            context, GroupSelectionView(selectedUsers));
+                      })
                     : null,
                 body: Column(
                   children: [
@@ -96,10 +114,15 @@ class FriendsSelectionView extends StatelessWidget {
                           final chatUserState = state[index];
                           return ListTile(
                             onTap: () {
-                              print('select user');
+                              _createFriendChannel(context, chatUserState);
                             },
-                            leading: const CircleAvatar(),
-                            title: Text('user $index'),
+                            leading: CircleAvatar(
+                              backgroundImage: chatUserState.chatUser.image !=
+                                      null
+                                  ? NetworkImage(chatUserState.chatUser.image!)
+                                  : null,
+                            ),
+                            title: Text(chatUserState.chatUser.name),
                             trailing: isGroup
                                 ? Checkbox(
                                     value: chatUserState.selected,

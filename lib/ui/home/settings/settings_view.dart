@@ -20,7 +20,7 @@ class SettingsView extends StatelessWidget {
               SettingsSwitchCubit(context.read<AppThemeCubit>().isDark),
         ),
         BlocProvider(
-          create: (_) => SettingsLogoutCubit(),
+          create: (_) => SettingsLogoutCubit(logoutUseCase: context.read()),
         )
       ],
       child: Scaffold(
@@ -31,27 +31,28 @@ class SettingsView extends StatelessWidget {
               BlocBuilder<SettingsSwitchCubit, bool>(
                 builder: (context, state) {
                   return Switch(
-                    value: state,
-                    onChanged:
-                        context.read<SettingsSwitchCubit>().onChangeDarkMode,
-                  );
+                      value: state,
+                      onChanged: (val) {
+                        context
+                            .read<SettingsSwitchCubit>()
+                            .onChangeDarkMode(val);
+                        context.read<AppThemeCubit>().updateTheme(val);
+                      });
                 },
               ),
-              Builder(
-                builder: (context) {
-                  return BlocListener<SettingsLogoutCubit, void>(
-                    listener: (context, state) {
-                      popAllAndPush(context, const SignInView());
+              Builder(builder: (context) {
+                return BlocListener<SettingsLogoutCubit, void>(
+                  listener: (context, state) {
+                    popAllAndPush(context, const SignInView());
+                  },
+                  child: ElevatedButton(
+                    child: const Text('LOGOUT'),
+                    onPressed: () {
+                      context.read<SettingsLogoutCubit>().logOut();
                     },
-                    child: ElevatedButton(
-                      child: const Text('LOGOUT'),
-                      onPressed: () {
-                        context.read<SettingsLogoutCubit>().logOut();
-                      },
-                    ),
-                  );
-                }
-              )
+                  ),
+                );
+              })
             ],
           ),
         ),
