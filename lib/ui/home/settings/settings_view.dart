@@ -27,7 +27,13 @@ class SettingsView extends StatelessWidget {
         body: Center(
           child: Column(
             children: [
-              if (image != null) Image.network(image) else const Placeholder(),
+              if (image != null)
+                Image.network(
+                  image,
+                  height: 200,
+                )
+              else
+                const Placeholder(),
               BlocBuilder<SettingsSwitchCubit, bool>(
                 builder: (context, state) {
                   return Switch(

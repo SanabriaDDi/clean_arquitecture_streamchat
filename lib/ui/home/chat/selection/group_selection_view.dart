@@ -37,9 +37,9 @@ class GroupSelectionView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Verify your identity'),
-                  if (state!.file != null)
+                  if (state?.file != null)
                     Image.file(
-                      state.file!,
+                      state!.file!,
                       height: 150,
                     )
                   else

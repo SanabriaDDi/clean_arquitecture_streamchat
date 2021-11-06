@@ -1,6 +1,7 @@
 import 'package:clean_architecture_streamchat/data/auth_repository.dart';
 import 'package:clean_architecture_streamchat/data/stream_api_repository.dart';
 import 'package:clean_architecture_streamchat/domain/exceptions/auth_exceptions.dart';
+import 'package:clean_architecture_streamchat/domain/models/auth_user.dart';
 
 class LoginUseCase {
   final AuthRepository authRepository;
@@ -18,6 +19,10 @@ class LoginUseCase {
         throw AuthException(AuthErrorCode.notChatUser);
       }
     }
-    throw AuthException(AuthErrorCode.notAuth);;
+    throw AuthException(AuthErrorCode.notAuth);
+  }
+
+  Future<AuthUser?> signIn() async {
+    return await authRepository.signIn();
   }
 }

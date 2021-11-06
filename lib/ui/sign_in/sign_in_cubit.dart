@@ -1,3 +1,4 @@
+import 'package:clean_architecture_streamchat/domain/usecases/login_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum SignInState {
@@ -6,12 +7,23 @@ enum SignInState {
 }
 
 class SignInCubit extends Cubit<SignInState> {
-  SignInCubit() : super(SignInState.none);
+  final LoginUseCase _loginUseCase;
+
+  SignInCubit({required LoginUseCase loginUseCase})
+      : _loginUseCase = loginUseCase,
+        super(SignInState.none);
 
   void signIn() async {
-    //TODO: validate with services
-    await Future.delayed(const Duration(seconds: 2));
-    emit(SignInState.none);
+    try {
+      final result = await _loginUseCase.validateLogin();
+      if (result) {
+        emit(SignInState.existingUser);
+      }
+    } catch (_) {
+      final result = await _loginUseCase.signIn();
+      if(result != null) {
+        emit(SignInState.none);
+      }
+    }
   }
-
 }

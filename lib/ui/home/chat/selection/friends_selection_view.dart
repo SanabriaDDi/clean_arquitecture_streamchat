@@ -127,7 +127,6 @@ class FriendsSelectionView extends StatelessWidget {
                                 ? Checkbox(
                                     value: chatUserState.selected,
                                     onChanged: (val) {
-                                      print('select user for a group');
                                       context
                                           .read<FriendsSelectionCubit>()
                                           .selectedUser(chatUserState);

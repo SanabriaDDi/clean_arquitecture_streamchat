@@ -6,7 +6,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateGroupInput {
-  final File imageFile;
+  final File? imageFile;
   final String name;
   final List<String> members;
 
@@ -22,13 +22,17 @@ class CreateGroupUseCase {
 
   Future<Channel> createGroup(CreateGroupInput input) async {
     final channelId = const Uuid().v4();
-    final imageResult = await _uploadStorageRepository.uploadPhoto(
-        file: input.imageFile, path: 'channels');
+    String? image;
+    if(input.imageFile != null) {
+      image = await _uploadStorageRepository.uploadPhoto(
+          file: input.imageFile!, path: 'channels');
+    }
+
     final channel = await _streamApiRepository.createGroupChat(
       channelId: channelId,
       name: input.name,
       members: input.members,
-      image: imageResult,
+      image: image,
     );
     return channel;
   }
