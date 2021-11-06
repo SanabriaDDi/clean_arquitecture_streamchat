@@ -1,6 +1,7 @@
 import 'package:clean_architecture_streamchat/dependencies.dart';
 import 'package:clean_architecture_streamchat/ui/app_theme_cubit.dart';
 import 'package:clean_architecture_streamchat/ui/splash/splash_view.dart';
+import 'package:clean_architecture_streamchat/ui/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,11 +34,15 @@ class MyApp extends StatelessWidget {
         child: BlocBuilder<AppThemeCubit, bool>(
           builder: (context, state) {
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'FlutterChat',
               home: const SplashView(),
-              theme: state ? ThemeData.dark() : ThemeData.light(),
+              theme: state ? Themes.themeDark : Themes.themeLight,
               builder: (context, child) {
-                return StreamChat(child: child, client: _streamChatClient);
+                return StreamChat(
+                  child: child,
+                  client: _streamChatClient,
+                );
               },
             );
           },

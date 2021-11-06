@@ -12,25 +12,28 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomeCubit(),
-      child: Column(
-        children: [
-          Expanded(
-            child: BlocBuilder<HomeCubit, int>(
-              builder: (context, state) {
-                return IndexedStack(
-                  index: state,
-                  children: const [
-                    ChatView(),
-                    SettingsView(),
-                  ],
-                );
-              },
+    return Scaffold(
+      backgroundColor: Theme.of(context).canvasColor,
+      body: BlocProvider(
+        create: (context) => HomeCubit(),
+        child: Column(
+          children: [
+            Expanded(
+              child: BlocBuilder<HomeCubit, int>(
+                builder: (context, state) {
+                  return IndexedStack(
+                    index: state,
+                    children: const [
+                      ChatView(),
+                      SettingsView(),
+                    ],
+                  );
+                },
+              ),
             ),
-          ),
-          const HomeNavigationBar()
-        ],
+            const HomeNavigationBar()
+          ],
+        ),
       ),
     );
   }
@@ -41,29 +44,103 @@ class HomeNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+    const navigationBarSize = 80.0;
+    const buttonSize = 56.0;
+    const buttonMargin = 4.0;
+    const topMargin = buttonSize / 2 + buttonMargin / 2;
+    final canvasColor = Theme.of(context).canvasColor;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: Material(
+        child: Container(
+          height: navigationBarSize + topMargin,
+          width: MediaQuery.of(context).size.width * 0.7,
+          color: canvasColor,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                top: topMargin,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: Theme.of(context)
+                        .bottomNavigationBarTheme
+                        .backgroundColor,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _HomeNavItem(
+                        text: 'Chats',
+                        iconData: Icons.chat_bubble,
+                        onTap: () => context.read<HomeCubit>().onChangeTab(0),
+                        selected:
+                            context.select((HomeCubit bloc) => bloc.state == 0),
+                      ),
+                      _HomeNavItem(
+                        text: 'Settings',
+                        iconData: Icons.settings,
+                        onTap: () => context.read<HomeCubit>().onChangeTab(1),
+                        selected:
+                            context.select((HomeCubit bloc) => bloc.state == 1),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: canvasColor,
+                    shape: BoxShape.circle,
+                  ),
+                  padding: const EdgeInsets.all(buttonMargin / 2),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      pushToPage(context, const FriendsSelectionView());
+                    },
+                    child: const Icon(Icons.add),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeNavItem extends StatelessWidget {
+  final IconData iconData;
+  final String text;
+  final VoidCallback onTap;
+  final bool selected;
+
+  const _HomeNavItem({
+    Key? key,
+    required this.iconData,
+    required this.text,
+    required this.onTap,
+    this.selected = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedColor =
+        Theme.of(context).bottomNavigationBarTheme.selectedItemColor;
+    final unselectedColor =
+        Theme.of(context).bottomNavigationBarTheme.unselectedItemColor;
+    final color = selected ? selectedColor : unselectedColor;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          ElevatedButton(
-            child: const Text('Chats'),
-            onPressed: () {
-              context.read<HomeCubit>().onChangeTab(0);
-            },
-          ),
-          FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              pushToPage(context, const FriendsSelectionView());
-            },
-          ),
-          ElevatedButton(
-            child: const Text('Settings'),
-            onPressed: () {
-              context.read<HomeCubit>().onChangeTab(1);
-            },
-          ),
+          Icon(iconData, color: color),
+          Text(text, style: TextStyle(color: color),),
         ],
       ),
     );
