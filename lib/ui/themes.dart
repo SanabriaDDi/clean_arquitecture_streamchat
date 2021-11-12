@@ -49,7 +49,6 @@ class Themes {
       selectedItemColor: primaryColor,
       unselectedItemColor: Colors.grey[300],
     ),
-    textSelectionColor: Colors.white,
     // switch active color
     toggleableActiveColor: primaryColor,
     canvasColor: backgroundDarkColor,

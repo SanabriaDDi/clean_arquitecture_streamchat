@@ -37,7 +37,9 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: 'FlutterChat',
               home: const SplashView(),
-              theme: state ? Themes.themeDark : Themes.themeLight,
+              theme: Themes.themeLight,
+              darkTheme: Themes.themeDark,
+              themeMode: state ? ThemeMode.dark : ThemeMode.light,
               builder: (context, child) {
                 return StreamChat(
                   child: child,

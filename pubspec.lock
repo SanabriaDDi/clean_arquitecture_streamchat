@@ -105,7 +105,7 @@ packages:
       name: connectivity_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.0"
+    version: "2.0.2"
   connectivity_plus_linux:
     dependency: transitive
     description:
@@ -376,7 +376,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.22.0"
+    version: "0.23.0+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -393,7 +393,7 @@ packages:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.3"
+    version: "0.15.0"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -652,7 +652,7 @@ packages:
       name: photo_view
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0"
+    version: "0.13.0"
   platform:
     dependency: transitive
     description:
@@ -709,20 +709,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.2"
-  scrollable_positioned_list:
-    dependency: transitive
-    description:
-      name: scrollable_positioned_list
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.2"
   share_plus:
     dependency: transitive
     description:
       name: share_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "3.0.4"
   share_plus_linux:
     dependency: transitive
     description:
@@ -853,21 +846,21 @@ packages:
       name: stream_chat
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "3.2.1"
   stream_chat_flutter:
     dependency: "direct main"
     description:
       name: stream_chat_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "3.2.0"
   stream_chat_flutter_core:
     dependency: transitive
     description:
       name: stream_chat_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "3.2.0"
   string_scanner:
     dependency: transitive
     description:
