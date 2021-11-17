@@ -25,7 +25,7 @@ class CreateGroupUseCase {
     String? image;
     if(input.imageFile != null) {
       image = await _uploadStorageRepository.uploadPhoto(
-          file: input.imageFile!, path: 'channels');
+          file: input.imageFile!, path: 'channels/$channelId');
     }
 
     final channel = await _streamApiRepository.createGroupChat(

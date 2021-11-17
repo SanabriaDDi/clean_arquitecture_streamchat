@@ -90,6 +90,7 @@ class StreamApiImpl extends StreamApiRepository {
       User(id: userId),
       token,
     );
-    return _client.state.currentUser!.extraData['name'] != null;
+    return _client.state.currentUser?.name != null &&
+        _client.state.currentUser?.name != userId;
   }
 }

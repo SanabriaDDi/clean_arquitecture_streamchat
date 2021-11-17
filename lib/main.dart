@@ -44,6 +44,17 @@ class MyApp extends StatelessWidget {
                 return StreamChat(
                   child: child,
                   client: _streamChatClient,
+                  streamChatThemeData:
+                      StreamChatThemeData.fromTheme(Theme.of(context)).copyWith(
+                          ownMessageTheme: MessageThemeData(
+                            messageBackgroundColor:
+                                Theme.of(context).accentColor,
+                            messageTextStyle: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          channelListViewTheme: ChannelListViewThemeData(
+                              backgroundColor: Theme.of(context).canvasColor)),
                 );
               },
             );
